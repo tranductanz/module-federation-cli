@@ -1,0 +1,1 @@
+# mwg-module-federation-cli
