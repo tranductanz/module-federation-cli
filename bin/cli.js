@@ -27,7 +27,7 @@ console.log(
 yargs(hideBin(process.argv))
   .usage(chalk.cyan("\nUsage: mwg-module <command> [options]"))
   .command(
-    "create-new-module [name]",
+    "create-new-module",
     chalk.cyan("Init a new module with a template (interactive selection)"),
     (yargs) => {
       yargs
