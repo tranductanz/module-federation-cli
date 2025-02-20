@@ -3,12 +3,13 @@
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 import createNewModule from "../commands/createNewModule.js";
-
 import chalk from "chalk";
 import figlet from "figlet";
 import clear from "clear";
+import pkg from "../package.json" assert { type: "json" };
+const { version } = pkg;
 
-// Clear console for a clean output
+// Clear console for clean output
 clear();
 
 // CLI Banner
@@ -17,17 +18,17 @@ console.log(
     figlet.textSync("MWG Module CLI", {
       font: "Small",
       horizontalLayout: "fitted",
-      verticalLayout: "default",
       width: 80,
     })
   )
 );
 
-// Yargs setup
+// Yargs configuration
 yargs(hideBin(process.argv))
+  .usage(chalk.cyan("\nUsage: mwg-module <command> [options]"))
   .command(
-    "create-new-module", // Add [name] to the command string
-    chalk.cyan("Init 1 module mới với template có sẵn"), // Command description
+    "create-new-module [name]",
+    chalk.cyan("Init a new module with a template (interactive selection)"),
     (yargs) => {
       yargs
         .positional("name", {
@@ -42,9 +43,35 @@ yargs(hideBin(process.argv))
           default: false,
         });
     },
-    (argv) => createNewModule(argv.name, argv.force)
+    async (argv) => {
+      await createNewModule(argv.name, argv.force);
+    }
   )
-  .demandCommand(1, chalk.green("✅✅✅ Snippets Module -----")) // Ensure help shows commands
-  .strict() // Show error on invalid commands
-  .help()
-  .alias("h", "help").argv;
+  .options({
+    version: {
+      alias: "v",
+      describe: chalk.green("Show version number"),
+      type: "boolean",
+    },
+    help: {
+      alias: "h",
+      describe: chalk.green("Show help"),
+      type: "boolean",
+    },
+  })
+  .demandCommand(1, chalk.red("❌ Please provide a valid command."))
+
+  .showHelpOnFail(
+    true,
+    `${chalk.cyan("💡💡 You currently using")} ${chalk.red(
+      `${version}`
+    )} ${chalk.cyan("CLI")}`
+  )
+  .help("help")
+  .alias("help", "h")
+  .alias("version", "v")
+  .epilog(
+    chalk.gray(
+      "\nFor more information, visit: https://github.com/tranductanz/module-federation-cli"
+    )
+  ).argv;
