@@ -1,7 +1,12 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
-function createNewModule(moduleName, forceOverwrite = false) {
+// __dirname is not defined in ESM, so recreate it:
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export default function createNewModule(moduleName, forceOverwrite = false) {
   const templateDir = path.join(__dirname, "../templates/modulewithRedux");
   const targetDir = process.cwd(); // Use current working directory
 
@@ -28,5 +33,3 @@ function createNewModule(moduleName, forceOverwrite = false) {
 
   console.log(`🎉 All template files have been created in ${targetDir}`);
 }
-
-module.exports = createNewModule;

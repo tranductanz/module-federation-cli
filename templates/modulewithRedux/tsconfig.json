@@ -1,0 +1,9 @@
+{
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "allowJs": true,
+    "noEmit": true // Do not compile the JS (or TS) files in this project on build
+  },
+  "compileOnSave": false
+}
