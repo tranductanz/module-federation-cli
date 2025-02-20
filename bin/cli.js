@@ -8,25 +8,26 @@ import chalk from "chalk";
 import figlet from "figlet";
 import clear from "clear";
 
-// Clear console
+// Clear console for a clean output
 clear();
 
 // CLI Banner
 console.log(
   chalk.yellow(
     figlet.textSync("MWG Module CLI", {
-      font: "Small", // Try "Mini" or "Calvin S" for even smaller fonts
+      font: "Small",
       horizontalLayout: "fitted",
       verticalLayout: "default",
-      width: 80, // Adjust width if needed
+      width: 80,
     })
   )
 );
 
+// Yargs setup
 yargs(hideBin(process.argv))
   .command(
-    "create-new-module",
-    chalk.cyan("Init 1 module mới với template có sẵn"),
+    "create-new-module", // Add [name] to the command string
+    chalk.cyan("Init 1 module mới với template có sẵn"), // Command description
     (yargs) => {
       yargs
         .positional("name", {
@@ -43,5 +44,7 @@ yargs(hideBin(process.argv))
     },
     (argv) => createNewModule(argv.name, argv.force)
   )
-  //   .demandCommand(1, chalk.red("❌ Please provide a valid command."))
-  .help().argv;
+  .demandCommand(1, chalk.green("✅✅✅ Snippets Module -----")) // Ensure help shows commands
+  .strict() // Show error on invalid commands
+  .help()
+  .alias("h", "help").argv;
