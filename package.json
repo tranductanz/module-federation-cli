@@ -2,7 +2,7 @@
   "type": "module",
   "name": "module-federation-cli",
   "version": "0.0.0--beta",
-  "description": "CLI tool belongs to MWG to create a Module Federation",
+  "description": "CLI tool to create a Module Federation",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
