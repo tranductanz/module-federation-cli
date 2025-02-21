@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "module-federation-cli",
+  "name": "module-federation-clii",
   "version": "0.0.1",
   "description": "CLI tool belongs to MWG to create a Module Federation",
   "main": "index.js",
