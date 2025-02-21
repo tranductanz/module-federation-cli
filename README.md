@@ -1,1 +1,1 @@
-# mwg-module-federation-cli
+# taantaan.dev module-federation-cli 
