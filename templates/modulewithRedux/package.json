@@ -18,7 +18,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@callstack-mwg/repack": "^3.7.2",
+    "@callstack-mwg/repack": "4.4.1",
     "@gorhom/bottom-sheet": "4.6.1",
     "@mwg-kits/common": "^0.0.4",
     "@mwg-kits/components": "0.1.18",
@@ -30,7 +30,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.9",
     "@react-navigation/stack": "^6.3.29",
-    "@rnmapbox/maps": "git+https://sourceapp.tgdd.vn/appplugins/maps.git#10.1.25",
+    "@rnmapbox/maps": "^100.1.33",
     "@turf/helpers": "6.5.0",
     "eslint-plugin-import": "^2.27.5",
     "react": "18.2.0",
