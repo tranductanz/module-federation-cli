@@ -28,7 +28,7 @@ console.log(
 
 // Yargs setup
 const cli = yargs(hideBin(process.argv))
-  .scriptName("mwg-module")
+  .scriptName("💡")
   .usage(
     chalk.cyan.bold("\nUsage: ") +
       chalk.whiteBright("mwg-module <command> [options]")

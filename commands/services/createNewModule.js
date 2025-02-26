@@ -4,7 +4,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 import inquirer from "inquirer";
 import chalk from "chalk";
-
+export const command = "create-new-module";
+export const describe = chalk.cyan(
+  "✨ Copy template contents directly into the current folder"
+);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -40,11 +43,6 @@ function copyTemplate(templateDir, targetDir, forceOverwrite) {
     }
   });
 }
-
-export const command = "create-new-module";
-export const describe = chalk.cyan(
-  "✨ Copy template contents directly into the current folder"
-);
 
 export const builder = (yargs) =>
   yargs.option("force", {
