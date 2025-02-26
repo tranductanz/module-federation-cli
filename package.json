@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "module-federation-cli",
-  "version": "0.0.2",
+  "version": "0.0.1--beta",
   "description": "CLI tool to create a Module Federation",
   "main": "index.js",
   "scripts": {
