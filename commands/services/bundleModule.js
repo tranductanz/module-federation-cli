@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { exec } from "child_process";
 
-export const command = chalk.greenBright("bundle-module");
+export const command = "bundle-module"; // Keep command name as a plain string for proper Yargs execution
 export const describe = chalk.cyan("✨ Bundling a module compile Repack");
 
 export const builder = (yargs) =>
@@ -13,26 +13,27 @@ export const builder = (yargs) =>
   });
 
 export const handler = ({ platform }) => {
-  const bundleCommand = `yarn react-native webpack-bundle --platform ${platform} --webpackConfig webpack-production.config.mjs --entry-file index.js --dev=false && cd build && tar -cvf PackageBundle.tar PackageBundle`;
+  const bundleCommand = `yarn && yarn react-native webpack-bundle --platform ${platform} --webpackConfig webpack-production.config.mjs --entry-file index.js --dev=false && cd build && tar -cvf PackageBundle.tar PackageBundle`;
 
   console.log(
-    chalk.blueBright(`🚀 Running bundle script for platform: ${platform}`)
+    chalk.blueBright(`🚀🚀🚀 Running bundle script for compiling Module`)
   );
 
-  const process = exec(bundleCommand, (error, stdout, stderr) => {
-    if (error) {
-      console.error(chalk.red(`❌ Error during bundling: ${error.message}`));
-      return;
-    }
+  const childProcess = exec(bundleCommand);
 
-    if (stderr) {
-      console.warn(chalk.yellowBright(`⚠️ Warnings: ${stderr}`));
-    }
-
-    console.log(chalk.green(`✅ Bundling complete!`));
-    console.log(stdout);
+  childProcess.stdout.on("data", (data) => {
+    process.stdout.write(chalk.greenBright(data));
   });
 
-  process.stdout.pipe(process.stdout);
-  process.stderr.pipe(process.stderr);
+  childProcess.stderr.on("data", (data) => {
+    process.stderr.write(chalk.redBright(data));
+  });
+
+  childProcess.on("close", (code) => {
+    if (code === 0) {
+      console.log(chalk.green(`✅ Bundling complete!`));
+    } else {
+      console.error(chalk.red(`❌ Bundling process exited with code: ${code}`));
+    }
+  });
 };
