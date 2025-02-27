@@ -1,7 +1,7 @@
 {
   "type": "module",
   "name": "module-federation-cli",
-  "version": "0.0.1--beta",
+  "version": "0.0.2--beta",
   "description": "CLI tool to create a Module Federation",
   "main": "index.js",
   "scripts": {
@@ -16,8 +16,10 @@
   "dependencies": {
     "chalk": "^5.4.1",
     "clear": "^0.1.0",
+    "crypto": "^1.0.1",
     "figlet": "^1.8.0",
     "inquirer": "^12.4.2",
+    "node-fetch": "^3.3.2",
     "yargs": "^17.7.2"
   }
 }

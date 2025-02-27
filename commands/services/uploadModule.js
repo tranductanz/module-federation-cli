@@ -3,10 +3,12 @@ import { exec } from "child_process";
 import path from "path";
 import inquirer from "inquirer";
 import { fileURLToPath } from "url";
+import { getValidToken } from "../../config/configManager.js"; // ✅ Secure token retrieval
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import { createRequire } from "module";
+
 // Create a require function relative to the current working directory
 const require = createRequire(path.join(process.cwd(), "package.json"));
 
@@ -46,12 +48,6 @@ export const builder = (yargs) =>
       type: "string",
       describe: "Platform (e.g., IOS, ANDROID)",
       default: "IOS",
-    })
-    .option("token", {
-      alias: "t",
-      type: "string",
-      describe: "Authorization token",
-      demandOption: false,
     });
 
 export const handler = async () => {
@@ -72,6 +68,16 @@ export const handler = async () => {
     console.log(chalk.red("❌ Upload canceled."));
     return;
   }
+
+  // ✅ Get a valid token (automatically renews if invalid)
+  const token = await getValidToken();
+  if (!token) {
+    console.error(
+      chalk.red("❌ Unable to obtain a valid token. Upload aborted.")
+    );
+    return;
+  }
+
   const platform = "IOS";
   const {
     version,
@@ -80,8 +86,9 @@ export const handler = async () => {
     featureName,
     "version-live": versionLive,
   } = require(path.join(process.cwd(), "package.json"));
-  const token = "d541ed9d-9902-43fe-9c46-8575772d2c2d";
+
   const versionModule = "1.0.0";
+
   const curlCommand = `curl --location --request POST 'https://erpapp.tgdd.vn/mwg-app-microapp-service/api/micro/uploadapp/v2' \
     --header 'accept: */*' \
     --header 'authorization: Bearer ${token}' \
@@ -95,7 +102,7 @@ export const handler = async () => {
     --form 'platform="${platform}"' \
     --form 'moduleName="${moduleName}"' \
     --form 'featureName="${featureName}"' \
-    --form 'fileType="gz"'`;
+    --form 'fileType="br"'`;
 
   console.log(chalk.blueBright("🚀 Uploading module....."));
 
