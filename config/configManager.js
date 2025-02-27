@@ -114,7 +114,7 @@ export const renewToken = async () => {
       return null;
     }
     const config = JSON.parse(fs.readFileSync(CONFIG_FILE_PATH, "utf-8"));
-    const url = "https://erpapp.tgdd.vn/mwg-app-auth-service/oauth/token";
+    const url = "oauth/token";
     const headers = {
       accept: "application/json, text/plain, */*",
       authorization: config.authToken,
