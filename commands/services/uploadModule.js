@@ -80,8 +80,8 @@ export const handler = async () => {
     featureName,
     "version-live": versionLive,
   } = require(path.join(process.cwd(), "package.json"));
-  const token = "Bearer d541ed9d-9902-43fe-9c46-8575772d2c2c";
-
+  const token = "d541ed9d-9902-43fe-9c46-8575772d2c2d";
+  const versionModule = "1.0.0";
   const curlCommand = `curl --location --request POST 'https://erpapp.tgdd.vn/mwg-app-microapp-service/api/micro/uploadapp/v2' \
     --header 'accept: */*' \
     --header 'authorization: Bearer ${token}' \
@@ -90,13 +90,14 @@ export const handler = async () => {
     --header 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36' \
     --form 'file=@"${filePath}"' \
     --form 'appName="${appName}"' \
+    --form 'versionModule="${versionModule}"' \
     --form 'versionMain="${version}"' \
     --form 'platform="${platform}"' \
     --form 'moduleName="${moduleName}"' \
     --form 'featureName="${featureName}"' \
     --form 'fileType="gz"'`;
 
-  console.log(chalk.blueBright("🚀 Uploading module..."));
+  console.log(chalk.blueBright("🚀 Uploading module....."));
 
   const uploadProcess = exec(curlCommand, (error, stdout, stderr) => {
     if (error) {
