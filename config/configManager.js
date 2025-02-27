@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 // ✅ Define config storage inside `commands/config/`
 const CONFIG_DIR = path.join(__dirname);
-const CONFIG_FILE_PATH = path.join(CONFIG_DIR, ".config.json");
+const CONFIG_FILE_PATH = path.join(CONFIG_DIR, "config.json");
 
 // ✅ Use a fixed 32-byte encryption key & 16-byte IV (DO NOT HARD-CODE IN PRODUCTION)
 const SECRET_KEY = crypto.createHash("sha256").update("my-secure-key").digest();
@@ -113,11 +113,11 @@ export const renewToken = async () => {
       console.log(chalk.red("❌ No TOTP provided. Token renewal aborted."));
       return null;
     }
-
+    const config = JSON.parse(fs.readFileSync(CONFIG_FILE_PATH, "utf-8"));
     const url = "https://erpapp.tgdd.vn/mwg-app-auth-service/oauth/token";
     const headers = {
       accept: "application/json, text/plain, */*",
-      authorization: "Basic bXdnLXdlYi1taWNyb2FwcDozMDlscHAyc2FsM0ts",
+      authorization: config.authToken,
       "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
     };
 
