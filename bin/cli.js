@@ -1,18 +1,19 @@
-#!/usr/bin/env node
+// bin/cli.js
+// #!/usr/bin/env node
 
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import createNewModule from "../commands/createNewModule.js";
+import inquirer from "inquirer";
 import chalk from "chalk";
 import figlet from "figlet";
 import clear from "clear";
 import { createRequire } from "module";
+import commands from "../commands/index.js";
 
-// ✅ Import package.json without warnings
 const require = createRequire(import.meta.url);
 const { version } = require("../package.json");
 
-// Clear console for a clean display
+// Clear console
 clear();
 
 // CLI Banner
@@ -26,74 +27,53 @@ console.log(
   )
 );
 
-// Yargs setup
-const cli = yargs(hideBin(process.argv))
-  .usage(
-    chalk.cyan.bold("\nUsage: ") +
-      chalk.whiteBright("mwg-module <command> [options]")
-  )
-  .version(version) // ✅ Uses version from package.json
-  .alias("version", "v")
-  .command(
-    "create-new-module [name]",
-    chalk.cyan("✨ Init a new module with a template (interactive selection)"),
-    (yargs) => {
-      yargs
-        .positional("name", {
-          describe: chalk.greenBright(
-            "Name of the module (used in placeholders)"
-          ),
-          type: "string",
-          default: "NewModule",
-        })
-        .option("force", {
-          alias: "f",
-          type: "boolean",
-          describe: chalk.greenBright(
-            "Overwrite existing files without prompt"
-          ),
-          default: false,
-        });
-    },
-    async (argv) => {
-      try {
-        console.log(
-          chalk.blueBright(`🚀 Starting to create module: ${argv.name}`)
-        );
-        await createNewModule(argv.name, argv.force); // ✅ Call once here
-        console.log(
-          chalk.green(`✅ Module '${argv.name}' created successfully!`)
-        );
-        process.exit(0); // ✅ Prevent double prompts
-      } catch (error) {
-        console.error(chalk.red(`❌ Error: ${error.message}`));
-        process.exit(1); // ✅ Clean error exit
-      }
-    }
-  )
-  .help("help")
-  .alias("help", "h")
-  .strictCommands()
-  .showHelpOnFail(
-    true,
-    chalk.red("❌ Invalid command! Use --help to see available commands.")
-  )
-  .epilog(
-    chalk.gray(
-      `\n💡 You are currently using ${chalk.greenBright(
-        version
-      )} CLI\n🔗 More info: https://github.com/tranductanz/module-federation-cli`
-    )
-  );
+(async () => {
+  // Prepare choices for the command selection prompt
+  const commandChoices = commands.map((command) => ({
+    name: `${command.command} - ${command.describe}`,
+    value: command,
+  }));
 
-// ✅ Show help with an informational prompt if no command is provided
-if (!process.argv.slice(2).length) {
-  console.log(
-    chalk.blueBright("\nℹ️ Info:"),
-    chalk.cyan("No command provided. Please use one of the following commands:")
-  );
-  cli.showHelp();
-  process.exit(0); // Exit with success code since it's informational
-}
+  // If no command is provided, show a prompt to select one
+  if (!process.argv.slice(2).length) {
+    const { selectedCommand } = await inquirer.prompt([
+      {
+        type: "list",
+        name: "selectedCommand",
+        message: "🔎 Select a command to execute:",
+        choices: commandChoices,
+      },
+    ]);
 
-cli.argv;
+    yargs(hideBin(["node", "cli.js", selectedCommand.command]))
+      .command(selectedCommand)
+      .help().argv;
+  } else {
+    // If command is provided, register commands normally
+    const cli = yargs(hideBin(process.argv))
+      .scriptName("mwg-module")
+      .usage(
+        chalk.cyan.bold("\nUsage: ") +
+          chalk.whiteBright("mwg-module <command> [options]")
+      )
+      .version(version)
+      .alias("version", "v")
+      .help("help")
+      .alias("help", "h")
+      .strictCommands()
+      .showHelpOnFail(
+        true,
+        chalk.red("❌ Invalid command! Use --help to see available commands.")
+      )
+      .epilog(
+        chalk.gray(
+          `\n💡 Using ${chalk.greenBright(
+            version
+          )} CLI\n🔗 More info: https://github.com/tranductanz/module-federation-cli`
+        )
+      );
+
+    commands.forEach((command) => cli.command(command));
+    cli.argv;
+  }
+})();
