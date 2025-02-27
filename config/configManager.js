@@ -89,8 +89,14 @@ export const renewToken = async () => {
     console.log(chalk.blue("🔄 Renewing token..."));
 
     // ✅ Handle user canceling the prompt
-    const { totp } = await inquirer
+    const { totp, username } = await inquirer
       .prompt([
+        {
+          type: "input",
+          name: "username",
+          message: "Enter your username (BCNB user):",
+          validate: (input) => input.length > 0 || "Username cannot be empty.",
+        },
         {
           type: "input",
           name: "totp",
@@ -116,8 +122,8 @@ export const renewToken = async () => {
     };
 
     const body = new URLSearchParams({
-      username: "175162",
-      totp: totp,
+      username,
+      totp,
       grant_type: "password",
     });
 
