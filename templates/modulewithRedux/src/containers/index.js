@@ -430,7 +430,7 @@ export const Home = (props) => {
                 ref={refMap}
                 projection={'globe'}
                 style={styles.map}
-                styleURL={'https://cdnv2.tgdd.vn/maps/styles/mwg.json'}
+                // styleURL={'https://cdnv2.tgdd.vn/maps/styles/mwg.json'}
                 logoEnabled={false}
                 compassEnabled={true}
                 attributionEnabled={false}
